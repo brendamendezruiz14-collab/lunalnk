@@ -1199,14 +1199,13 @@
             <!-- CREATE PAGE -->
             <div id="createPage" class="page create-container">
                 <h2>✨ Crea tu Historia</h2>
-                <form class="form-card" onsubmit="createStory(event)">
+                <div class="form-card">
                     <div class="form-group">
                         <label>Título de la Historia</label>
                         <input 
                             type="text" 
                             id="titleInput" 
                             placeholder="Escribe el título de tu novela"
-                            required
                         >
                     </div>
 
@@ -1215,13 +1214,12 @@
                         <textarea 
                             id="descriptionInput" 
                             placeholder="Describe tu historia..."
-                            required
                         ></textarea>
                     </div>
 
                     <div class="form-group">
                         <label>Categoría</label>
-                        <select id="categoryInput" required>
+                        <select id="categoryInput">
                             <option>Romance</option>
                             <option>Fantasía</option>
                             <option>Drama</option>
@@ -1247,9 +1245,9 @@
                     </div>
 
                     <div class="btn-group">
-                        <button type="submit" class="btn btn-primary">🚀 Crear Historia</button>
+                        <button type="button" class="btn btn-primary" onclick="createStory()">🚀 Crear Historia</button>
                     </div>
-                </form>
+                </div>
             </div>
 
             <!-- LIBRARY PAGE -->
@@ -1560,13 +1558,21 @@ Usa los botones para dar formato:
         }
 
         // ==================== CREAR HISTORIA ====================
-        function createStory(event) {
-            event.preventDefault();
-
-            const title = document.getElementById('titleInput').value;
-            const description = document.getElementById('descriptionInput').value;
+        function createStory() {
+            const title = document.getElementById('titleInput').value.trim();
+            const description = document.getElementById('descriptionInput').value.trim();
             const category = document.getElementById('categoryInput').value;
             const coverImage = document.getElementById('imagePreview').src || null;
+
+            if (!title) {
+                alert('Por favor escribe un título para tu historia');
+                return;
+            }
+
+            if (!description) {
+                alert('Por favor escribe una descripción para tu historia');
+                return;
+            }
 
             const newStory = {
                 id: Date.now(),
@@ -1585,7 +1591,9 @@ Usa los botones para dar formato:
             currentEditingStoryId = newStory.id;
             saveData();
 
-            document.querySelector('.form-card').reset();
+            document.getElementById('titleInput').value = '';
+            document.getElementById('descriptionInput').value = '';
+            document.getElementById('categoryInput').value = 'Romance';
             document.getElementById('imagePreview').style.display = 'none';
 
             alert('¡Historia creada! Ahora edítala para agregar capítulos.');
